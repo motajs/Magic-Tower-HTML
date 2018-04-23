@@ -107,6 +107,7 @@
 		19082F5D208CDB2D003C9241 /* ICDeviceIDManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICDeviceIDManager.m; sourceTree = "<group>"; };
 		19082F5F208CE8B2003C9241 /* IDKeychainManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDKeychainManager.h; sourceTree = "<group>"; };
 		19082F60208CE8B2003C9241 /* IDKeychainManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDKeychainManager.m; sourceTree = "<group>"; };
+		19082F65208D74A3003C9241 /* STGameMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STGameMessage.h; sourceTree = "<group>"; };
 		38B91FC393E693232CF6F127 /* libPods-Spell Tower.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Spell Tower.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F3DD0F64A37E20D8D454185 /* Pods-Spell Tower.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Spell Tower.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Spell Tower/Pods-Spell Tower.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,6 +272,7 @@
 		19082F3A208CD212003C9241 /* OfflineGames */ = {
 			isa = PBXGroup;
 			children = (
+				19082F64208D7493003C9241 /* Message */,
 				19082F4A208CD72D003C9241 /* Model */,
 				19082F46208CD6F9003C9241 /* Manager */,
 				19082F3F208CD559003C9241 /* View */,
@@ -361,6 +363,14 @@
 				19082F5D208CDB2D003C9241 /* ICDeviceIDManager.m */,
 			);
 			path = DeviceID;
+			sourceTree = "<group>";
+		};
+		19082F64208D7493003C9241 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				19082F65208D74A3003C9241 /* STGameMessage.h */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 		33317CE8623406D987B88E95 /* Frameworks */ = {

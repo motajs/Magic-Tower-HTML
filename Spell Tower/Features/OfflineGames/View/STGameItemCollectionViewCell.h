@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STGameModel.h"
 
 @interface STGameItemCollectionViewCell : UICollectionViewCell
 
-- (void)setupWithModel:(id)model;
+- (void)setupWithModel:(STGameModel *)model;
 
 @end

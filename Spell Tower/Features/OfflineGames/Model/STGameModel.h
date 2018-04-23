@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSString *originAuthor;
 @property (nonatomic, strong) NSString *copiedAuthor;
 @property (nonatomic, strong) NSString *webURLString;
-@property (nonatomic, strong) NSString *imageString;
+@property (nonatomic, strong) NSURL *imageURL;
 @property (nonatomic, strong) NSString *descriptionString;
 @property (nonatomic, strong) NSString *extraInfo;
 @property (nonatomic, assign) float score;
@@ -30,6 +30,8 @@
 @property (nonatomic, strong) NSArray<NSString *> *tags;
 
 @property (nonatomic, readonly) NSURL *localRootURL;
+@property (nonatomic, readonly) NSURL *thumbURL;
+@property (nonatomic, readonly) NSURL *downloadURL;
 
 + (instancetype)modelFromJSON:(NSDictionary *)json;
 + (NSArray<STGameModel *> *)modelsFromJSONArray:(NSArray *)jsonArray;

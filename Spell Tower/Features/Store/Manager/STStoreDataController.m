@@ -21,7 +21,8 @@
 {
     self = [super init];
     if (self) {
-        self.games = [NSMutableArray array];
+        _games = [NSMutableArray array];
+        _hasMore = YES;
     }
     return self;
 }
@@ -32,11 +33,15 @@
         return;
     }
     self.currentPage = 1;
+    self.hasMore = YES;
     self.isRequestOnAir = YES;
     [ICNetworkManager requestApiPath:@"https://ckcz123.com/games/upload.php" method:@"GET" params:@{@"type": @"all", @"page": @(self.currentPage)} withCompletionBlock:^(BOOL success, NSDictionary *data, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isRequestOnAir = NO;
             if (success) {
+                if ([data[@"pages"] integerValue] == self.currentPage) {
+                    self.hasMore = NO;
+                }
                 NSArray *result = [STGameModel modelsFromJSONArray:data[@"data"]];
                 self.games = result.mutableCopy;
                 if (completionBlock) {
@@ -62,6 +67,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isRequestOnAir = NO;
             if (success) {
+                if ([data[@"pages"] integerValue] == self.currentPage) {
+                    self.hasMore = NO;
+                }
                 NSArray *result = [STGameModel modelsFromJSONArray:data[@"data"]];
                 [self.games addObjectsFromArray:result];
                 if (completionBlock) {

@@ -11,6 +11,8 @@
 
 @interface STStoreTableViewCell : UITableViewCell
 
+@property (nonatomic, copy) void (^downloadButtonTapBlock)(void);
+
 - (void)configWithGame:(STGameModel *)game;
 
 @end

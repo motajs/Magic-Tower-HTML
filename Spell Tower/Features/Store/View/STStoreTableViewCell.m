@@ -10,6 +10,7 @@
 #import "STStoreTableViewCell.h"
 #import <Masonry.h>
 #import "IDColorService.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface STStoreTableViewCell()
 
@@ -43,11 +44,12 @@
     [self.thumbnailImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.top.equalTo(self.contentView).offset(15);
         make.width.height.equalTo(@60);
+        make.bottom.lessThanOrEqualTo(self.contentView).offset(-10);
     }];
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.thumbnailImageView.mas_trailing).offset(10);
-        make.centerY.equalTo(self.thumbnailImageView);
+        make.top.equalTo(self.thumbnailImageView);
         make.trailing.lessThanOrEqualTo(self.downloadButton.mas_leading).offset(-10);
     }];
     
@@ -61,7 +63,7 @@
         make.leading.equalTo(self.authorLabel);
         make.top.equalTo(self.authorLabel.mas_bottom).offset(10);
         make.trailing.lessThanOrEqualTo(self.downloadButton.mas_leading).offset(-10);
-        make.bottom.equalTo(self.contentView).offset(-10);
+        make.bottom.lessThanOrEqualTo(self.contentView).offset(-10);
     }];
     
     [self.downloadButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -118,6 +120,7 @@
         _downloadButton.layer.borderColor = _downloadButton.tintColor.CGColor;
         _downloadButton.layer.cornerRadius = 5;
         _downloadButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10);
+        [_downloadButton addTarget:self action:@selector(downloadButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         
         [_downloadButton setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     }
@@ -129,6 +132,14 @@
     self.titleLabel.text = game.titleName;
     self.authorLabel.text = [NSString stringWithFormat:@"%@/%@", game.originAuthor, game.copiedAuthor];
     self.descLabel.text = game.descriptionString;
+    [self.thumbnailImageView yy_setImageWithURL:game.thumbURL placeholder:[UIImage imageNamed:@"placeholder"] options:YYWebImageOptionSetImageWithFadeAnimation completion:nil];
+}
+
+- (void)downloadButtonTapped
+{
+    if (self.downloadButtonTapBlock) {
+        self.downloadButtonTapBlock();
+    }
 }
 
 @end

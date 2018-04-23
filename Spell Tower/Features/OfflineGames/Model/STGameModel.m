@@ -21,8 +21,8 @@
     model.originAuthor = json[@"author"];
     model.copiedAuthor = json[@"author2"];
     model.webURLString = json[@"link"];
-    model.imageString = json[@"image"];
-    model.descriptionString = json[@"text"];
+    model.imageURL = [NSURL URLWithString:json[@"image"]];
+    model.descriptionString = json[@"description"];
     model.extraInfo = json[@"content"];
     model.score = [json[@"score"] floatValue];
     model.playerCount = [json[@"people"] integerValue];
@@ -40,6 +40,39 @@
     return [jsonArray mapWithBlock:^id(id item, NSInteger index) {
         return [self modelFromJSON:item];
     }];
+}
+
+- (NSURL *)localRootURL
+{
+    NSString *rootPath = [[STGameModel allGamesRootPath] stringByAppendingPathComponent:self.gameID];
+    return [NSURL fileURLWithPath:rootPath];
+}
+
+- (NSURL *)thumbURL
+{
+    NSString *imageURLString = self.imageURL.absoluteString;
+    return [NSURL URLWithString:[[[imageURLString stringByDeletingPathExtension] stringByAppendingString:@".min"] stringByAppendingPathExtension:[imageURLString pathExtension]]];
+}
+
+- (NSURL *)downloadURL
+{
+    return [NSURL URLWithString:[self.webURLString stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.zip", self.identifierName]]];
+}
+
++ (NSString *)allGamesRootPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = paths.firstObject;
+    return documentPath;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+    STGameModel *model = object;
+    return [self.gameID isEqualToString:model.gameID];
 }
 
 @end

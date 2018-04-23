@@ -7,12 +7,70 @@
 //
 
 #import "STGameItemCollectionViewCell.h"
+#import <Masonry.h>
+#import <UIImageView+YYWebImage.h>
+#import "IDColorService.h"
+
+@interface STGameItemCollectionViewCell()
+
+@property (nonatomic, strong) UIImageView *thumbImageView;
+@property (nonatomic, strong) UILabel *gameTitle;
+
+@end
 
 @implementation STGameItemCollectionViewCell
 
-- (void)setupWithModel:(id)model
+- (instancetype)initWithFrame:(CGRect)frame
 {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setupUI];
+    }
+    return self;
+}
+
+- (void)setupUI
+{
+    [self.contentView addSubview:self.thumbImageView];
+    [self.contentView addSubview:self.gameTitle];
     
+    [self.thumbImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView).offset(10);
+        make.leading.equalTo(self.contentView).offset(10);
+        make.trailing.equalTo(self.contentView).offset(-10);
+        
+        make.width.height.equalTo(@(128));
+    }];
+    
+    [self.gameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.thumbImageView.mas_bottom).offset(10);
+        make.centerX.equalTo(self.thumbImageView);
+        make.bottom.equalTo(self.thumbImageView).offset(-10);
+    }];
+}
+
+- (UIImageView *)thumbImageView
+{
+    if (!_thumbImageView) {
+        _thumbImageView = [[UIImageView alloc] init];
+    }
+    return _thumbImageView;
+}
+
+- (UILabel *)gameTitle
+{
+    if (!_gameTitle) {
+        _gameTitle = [[UILabel alloc] init];
+        _gameTitle.font = [UIFont systemFontOfSize:13];
+        _gameTitle.textColor = IDColorS10;
+    }
+    return _gameTitle;
+}
+
+- (void)setupWithModel:(STGameModel *)model
+{
+    [self.thumbImageView yy_setImageWithURL:model.imageURL placeholder:[UIImage imageNamed:@"placeholder"] options:YYWebImageOptionSetImageWithFadeAnimation completion:nil];
+    self.gameTitle.text = model.titleName;
 }
 
 @end

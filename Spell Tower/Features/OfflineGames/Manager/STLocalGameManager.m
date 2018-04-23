@@ -8,6 +8,9 @@
 
 #import "STLocalGameManager.h"
 #import "LWStorageManager.h"
+#import <SSZipArchive.h>
+#import "ICMessageCenter.h"
+#import "STGameMessage.h"
 
 static NSString * const ICProjectConfigsStorageKey = @"ICProjectConfigsStorageKey";
 
@@ -64,6 +67,20 @@ static NSString * const ICProjectConfigsStorageKey = @"ICProjectConfigsStorageKe
     [self.storedGames removeObjectAtIndex:index];
     [self.storedGames insertObject:game atIndex:newIndex];
     [self sync];
+}
+
+- (void)downloadGame:(STGameModel *)game withCompletionBlock:(void (^)(void))completionBlock
+{
+    [[[NSURLSession sharedSession] downloadTaskWithURL:game.downloadURL completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        [SSZipArchive unzipFileAtPath:location.path toDestination:game.localRootURL.path];
+        [self.storedGames addObject:game];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            IC_SEND_MESSAGE(STGameMessage, gameListDidChange, gameListDidChange);
+            if (completionBlock) {
+                completionBlock();
+            }
+        });
+    }] resume];
 }
 
 @end

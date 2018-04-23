@@ -12,6 +12,9 @@
 #import "STStoreTableViewCell.h"
 #import "STStoreDataController.h"
 #import <Masonry.h>
+#import "STLocalGameManager.h"
+#import "ICMacros.h"
+#import "ICUIUtils.h"
 
 @interface STStoreViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -36,6 +39,7 @@
 
 - (void)setupUI
 {
+    self.title = @"获取新游戏";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -77,12 +81,21 @@
 {
     STStoreTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(STStoreTableViewCell.class)];
     [cell configWithGame:self.dataController.games[indexPath.row]];
+    @weakify(self);
+    cell.downloadButtonTapBlock = ^{
+        @strongify(self);
+        [ICUIUtils loadingWithStatus:@"正在下载"];
+        [[STLocalGameManager sharedInstance] downloadGame:self.dataController.games[indexPath.row] withCompletionBlock:^{
+            [ICUIUtils endLoading];
+            [ICUIUtils toast:@"下载成功"];
+        }];
+    };
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > self.dataController.games.count - 3) {
+    if (indexPath.row > self.dataController.games.count - 3 && self.dataController.hasMore) {
         [self.dataController loadMoreWithCompletion:^(NSArray<STGameModel *> *result, NSError *error) {
             [self.tableView reloadData];
         }];

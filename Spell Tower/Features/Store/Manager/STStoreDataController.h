@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSMutableArray<STGameModel *> *games;
 @property (nonatomic, assign) BOOL isRequestOnAir;
+@property (nonatomic, assign) BOOL hasMore;
 
 - (void)initFetchWithCompletion:(void (^)(NSArray<STGameModel *> *result, NSError *error))completionBlock;
 - (void)loadMoreWithCompletion:(void (^)(NSArray<STGameModel *> *result, NSError *error))completionBlock;

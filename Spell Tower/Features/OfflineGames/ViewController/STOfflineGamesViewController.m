@@ -14,6 +14,8 @@
 #import "STFindMoreGamesCollectionViewCell.h"
 #import "ICMacros.h"
 #import "STLocalGameManager.h"
+#import "ICMessageCenter.h"
+#import "STGameMessage.h"
 
 #define DROP_BAR_HEIGHT (60 + BOTTOM_OFFSET)
 
@@ -25,10 +27,10 @@ NSString * const deleteActiveColor = @"a91212";
 
 
 
-@interface STOfflineGamesViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDropDelegate, UIDropInteractionDelegate>
+@interface STOfflineGamesViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDropDelegate, UIDropInteractionDelegate, STGameMessage>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) NSMutableArray *localGames;
+@property (nonatomic, strong) NSArray *localGames;
 @property (nonatomic, strong) UIView *dropTargetView;
 @property (nonatomic, strong) UIView *editDropView;
 @property (nonatomic, strong) UIView *deleteDropView;
@@ -45,6 +47,7 @@ NSString * const deleteActiveColor = @"a91212";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    IC_REGISTER_MESSAGE(self, STGameMessage);
     [self setupUI];
 }
 
@@ -58,7 +61,6 @@ NSString * const deleteActiveColor = @"a91212";
     }];
     
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Project_List_Settings"] style:UIBarButtonItemStyleDone target:self action:@selector(settingsButtonTapped:)];
-    settingsButton.tintColor = IDColorS20;
     self.navigationItem.leftBarButtonItem = settingsButton;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTapped:)];
@@ -84,6 +86,7 @@ NSString * const deleteActiveColor = @"a91212";
         layout.sectionInset=UIEdgeInsetsMake(20, 30, 20, 30);
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.alwaysBounceVertical = YES;
         [_collectionView registerClass:[STGameItemCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([STGameItemCollectionViewCell class])];
         [_collectionView registerClass:[STFindMoreGamesCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([STFindMoreGamesCollectionViewCell class])];
@@ -127,7 +130,7 @@ NSString * const deleteActiveColor = @"a91212";
     if (indexPath) {
         self.isMovingItem = YES;
         [[STLocalGameManager sharedInstance] moveGameAtIndex:indexPath.item toIndex:coordinator.destinationIndexPath.item];
-        self.localGames = [STLocalGameManager sharedInstance].localGames.mutableCopy;
+        self.localGames = [STLocalGameManager sharedInstance].localGames;
         [self.collectionView moveItemAtIndexPath:indexPath toIndexPath:coordinator.destinationIndexPath];
         [coordinator dropItem:coordinator.items.firstObject.dragItem toItemAtIndexPath:coordinator.destinationIndexPath];
         self.isMovingItem = NO;
@@ -309,9 +312,16 @@ NSString * const deleteActiveColor = @"a91212";
         self.isMovingItem = YES;
         [[STLocalGameManager sharedInstance] deleteGame:targetGame];
         self.isMovingItem = NO;
-        self.localGames = [STLocalGameManager sharedInstance].localGames.mutableCopy;
+        self.localGames = [STLocalGameManager sharedInstance].localGames;
         [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
     }
+}
+
+#pragma mark - STGameMessage
+- (void)gameListDidChange
+{
+    self.localGames = [STLocalGameManager sharedInstance].localGames;
+    [self.collectionView reloadData];
 }
 
 @end
