@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UIImageView *thumbImageView;
 @property (nonatomic, strong) UILabel *gameTitle;
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -27,6 +28,23 @@
         [self setupUI];
     }
     return self;
+}
+
+- (UILongPressGestureRecognizer *)longPress
+{
+    if (!_longPress) {
+        _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressCell:)];
+    }
+    return _longPress;
+}
+
+- (void)longPressCell:(UILongPressGestureRecognizer *)longPress
+{
+    if (longPress.state == UIGestureRecognizerStateBegan) {
+        if (self.longPressBlock) {
+            self.longPressBlock();
+        }
+    }
 }
 
 - (void)setupUI
@@ -47,6 +65,8 @@
         make.centerX.equalTo(self.thumbImageView);
         make.bottom.equalTo(self.contentView).offset(-10);
     }];
+    
+    [self addGestureRecognizer:self.longPress];
 }
 
 - (UIImageView *)thumbImageView

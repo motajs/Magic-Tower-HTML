@@ -16,7 +16,6 @@
 #import "STLocalGameManager.h"
 #import "ICMessageCenter.h"
 #import "STGameMessage.h"
-#import "AWEBubbleManager.h"
 
 #define DROP_BAR_HEIGHT (60 + BOTTOM_OFFSET)
 
@@ -104,9 +103,13 @@ NSString * const deleteActiveColor = @"a91212";
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         
-        _collectionView.dragInteractionEnabled = YES;
-        _collectionView.dragDelegate = self;
-        _collectionView.dropDelegate = self;
+        if (@available(iOS 11.0, *)) {
+            _collectionView.dragInteractionEnabled = YES;
+            _collectionView.dragDelegate = self;
+            _collectionView.dropDelegate = self;
+        } else {
+            // Fallback on earlier versions
+        }
     }
     return _collectionView;
 }
@@ -123,7 +126,7 @@ NSString * const deleteActiveColor = @"a91212";
     return _emptyLabel;
 }
 
-- (NSArray<UIDragItem *> *)collectionView:(UICollectionView *)collectionView itemsForBeginningDragSession:(id<UIDragSession>)session atIndexPath:(NSIndexPath *)indexPath
+- (NSArray<UIDragItem *> *)collectionView:(UICollectionView *)collectionView itemsForBeginningDragSession:(id<UIDragSession>)session atIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0))
 {
     NSItemProvider *provider = [[NSItemProvider alloc] init];
     UIDragItem *dragItem = [[UIDragItem alloc] initWithItemProvider:provider];
@@ -131,22 +134,22 @@ NSString * const deleteActiveColor = @"a91212";
     return @[dragItem];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView dragSessionWillBegin:(id<UIDragSession>)session
+- (void)collectionView:(UICollectionView *)collectionView dragSessionWillBegin:(id<UIDragSession>)session API_AVAILABLE(ios(11.0))
 {
     [self showDropView];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView dropSessionDidEnd:(id<UIDropSession>)session
+- (void)collectionView:(UICollectionView *)collectionView dropSessionDidEnd:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     [self hideDropView];
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canHandleDropSession:(id<UIDropSession>)session
+- (BOOL)collectionView:(UICollectionView *)collectionView canHandleDropSession:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     return self.collectionView.hasActiveDrag && session.localDragSession;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performDropWithCoordinator:(id<UICollectionViewDropCoordinator>)coordinator
+- (void)collectionView:(UICollectionView *)collectionView performDropWithCoordinator:(id<UICollectionViewDropCoordinator>)coordinator  API_AVAILABLE(ios(11.0))
 {
     NSIndexPath *indexPath = coordinator.items.firstObject.dragItem.localObject;
     if (indexPath) {
@@ -159,7 +162,8 @@ NSString * const deleteActiveColor = @"a91212";
     }
 }
 
-- (UICollectionViewDropProposal *)collectionView:(UICollectionView *)collectionView dropSessionDidUpdate:(id<UIDropSession>)session withDestinationIndexPath:(NSIndexPath *)destinationIndexPath {
+- (UICollectionViewDropProposal *)collectionView:(UICollectionView *)collectionView dropSessionDidUpdate:(id<UIDropSession>)session withDestinationIndexPath:(NSIndexPath *)destinationIndexPath  API_AVAILABLE(ios(11.0))
+{
     if (destinationIndexPath && destinationIndexPath.item < self.localGames.count) {
         return [[UICollectionViewDropProposal alloc] initWithDropOperation:UIDropOperationMove intent:UICollectionViewDropIntentInsertAtDestinationIndexPath];
     }
@@ -193,6 +197,23 @@ NSString * const deleteActiveColor = @"a91212";
         // Game item
         STGameItemCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([STGameItemCollectionViewCell class]) forIndexPath:indexPath];
         [cell setupWithModel:self.localGames[indexPath.row]];
+        @weakify(self);
+        @weakify(cell);
+        cell.longPressBlock = ^{
+            @strongify(self);
+            @strongify(cell);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"选择操作" preferredStyle:UIAlertControllerStyleActionSheet];
+            [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                if (indexPath) {
+                    [self deleteGameAtIndexPath:indexPath];
+                }
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            alert.popoverPresentationController.sourceView = cell;
+            alert.popoverPresentationController.sourceRect = cell.bounds;
+            [self presentViewController:alert animated:YES completion:nil];
+        };
         return cell;
     } else {
         // New game item
@@ -207,8 +228,12 @@ NSString * const deleteActiveColor = @"a91212";
         _dropTargetView = [[UIView alloc] init];
         [_dropTargetView addSubview:self.deleteDropView];
         
-        UIDropInteraction *dropInteraction = [[UIDropInteraction alloc] initWithDelegate:self];
-        [_dropTargetView addInteraction:dropInteraction];
+        if (@available(iOS 11.0, *)) {
+            UIDropInteraction *dropInteraction = [[UIDropInteraction alloc] initWithDelegate:self];
+            [_dropTargetView addInteraction:dropInteraction];
+        } else {
+            // Fallback on earlier versions
+        }
         
         [self.deleteDropView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self->_dropTargetView);
@@ -272,12 +297,12 @@ NSString * const deleteActiveColor = @"a91212";
 }
 
 #pragma mark - UIDropInteraction
-- (BOOL)dropInteraction:(UIDropInteraction *)interaction canHandleSession:(id<UIDropSession>)session
+- (BOOL)dropInteraction:(UIDropInteraction *)interaction canHandleSession:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     return session.localDragSession;
 }
 
-- (UIDropProposal *)dropInteraction:(UIDropInteraction *)interaction sessionDidUpdate:(id<UIDropSession>)session
+- (UIDropProposal *)dropInteraction:(UIDropInteraction *)interaction sessionDidUpdate:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteColor];
     CGPoint location = [session locationInView:self.dropTargetView];
@@ -289,12 +314,12 @@ NSString * const deleteActiveColor = @"a91212";
     return [[UIDropProposal alloc] initWithDropOperation:UIDropOperationForbidden];
 }
 
-- (void)dropInteraction:(UIDropInteraction *)interaction sessionDidExit:(id<UIDropSession>)session
+- (void)dropInteraction:(UIDropInteraction *)interaction sessionDidExit:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteColor];
 }
 
-- (void)dropInteraction:(UIDropInteraction *)interaction performDrop:(id<UIDropSession>)session
+- (void)dropInteraction:(UIDropInteraction *)interaction performDrop:(id<UIDropSession>)session API_AVAILABLE(ios(11.0))
 {
     UIDragItem *item = session.localDragSession.items.firstObject;
     NSIndexPath *indexPath = item.localObject;
@@ -303,16 +328,21 @@ NSString * const deleteActiveColor = @"a91212";
     }
     CGPoint location = [session locationInView:self.dropTargetView];
     UIView *target = [self.dropTargetView hitTest:location withEvent:nil];
-    STGameModel *targetGame = self.localGames[indexPath.row];
     if (target == self.deleteDropView) {
         // Delete Project
-        self.isMovingItem = YES;
-        [[STLocalGameManager sharedInstance] deleteGame:targetGame];
-        self.isMovingItem = NO;
-        self.localGames = [STLocalGameManager sharedInstance].localGames;
-        [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        self.emptyLabel.hidden = self.localGames.count > 0;
+        [self deleteGameAtIndexPath:indexPath];
     }
+}
+
+- (void)deleteGameAtIndexPath:(NSIndexPath *)indexPath
+{
+    STGameModel *targetGame = self.localGames[indexPath.row];
+    self.isMovingItem = YES;
+    [[STLocalGameManager sharedInstance] deleteGame:targetGame];
+    self.isMovingItem = NO;
+    self.localGames = [STLocalGameManager sharedInstance].localGames;
+    [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+    self.emptyLabel.hidden = self.localGames.count > 0;
 }
 
 #pragma mark - STGameMessage
@@ -322,5 +352,4 @@ NSString * const deleteActiveColor = @"a91212";
     [self.collectionView reloadData];
     self.emptyLabel.hidden = self.localGames.count > 0;
 }
-
 @end

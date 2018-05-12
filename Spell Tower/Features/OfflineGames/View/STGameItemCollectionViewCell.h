@@ -11,6 +11,8 @@
 
 @interface STGameItemCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, copy) void (^longPressBlock)(void);
+
 - (void)setupWithModel:(STGameModel *)model;
 
 @end

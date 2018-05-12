@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 #import "IDRouter.h"
 #import "STLocalGameManager.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 
 @interface AppDelegate ()
 
@@ -18,6 +21,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [Fabric with:@[[Crashlytics class]]];
+
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:[IDRouter viewControllerForURL:@"tower://offline-games"]];
     self.window.rootViewController = navi;

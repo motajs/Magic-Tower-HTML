@@ -29,7 +29,7 @@
         method_setImplementation(origMethod, newSizeToFit);
     }
     
-    CGSize (^block_intrinsicContentSize)() = ^CGSize(UIButton *self){
+    CGSize (^block_intrinsicContentSize)(UIButton *) = ^CGSize(UIButton *self){
         CGSize size = [self sizeThatFits:CGSizeZero];
         size.width += self.titleEdgeInsets.left + self.titleEdgeInsets.right + self.imageEdgeInsets.left + self.imageEdgeInsets.right;
         return size;

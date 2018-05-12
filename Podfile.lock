@@ -1,4 +1,7 @@
 PODS:
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.6)
   - FDFullscreenPopGesture (1.1)
   - Masonry (1.1.0)
   - MJRefresh (3.1.15.3)
@@ -15,6 +18,8 @@ PODS:
     - YYImage
 
 DEPENDENCIES:
+  - Crashlytics
+  - Fabric
   - FDFullscreenPopGesture
   - Masonry
   - MJRefresh
@@ -25,6 +30,8 @@ DEPENDENCIES:
   - YYWebImage
 
 SPEC CHECKSUMS:
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
@@ -36,6 +43,6 @@ SPEC CHECKSUMS:
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: 15cb8c73f2d519599daa79286c8aee6afa2bfe9a
+PODFILE CHECKSUM: 56bd9054502794c998cc28b077842f293059639c
 
 COCOAPODS: 1.3.1

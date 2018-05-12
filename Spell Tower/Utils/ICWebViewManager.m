@@ -15,8 +15,10 @@
 + (void)load
 {
     [IDRouter registerHandler:^(NSDictionary *params) {
-        SFSafariViewController *safariVC = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:params[@"url"]]];
-        [[IDResponder topViewController] presentViewController:safariVC animated:YES completion:nil];
+        if (@available(iOS 9.0, *)) {
+            SFSafariViewController *safariVC = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:params[@"url"]]];
+            [[IDResponder topViewController] presentViewController:safariVC animated:YES completion:nil];
+        }
     } forURLPattern:@"icode://webview"];
 }
 

@@ -70,6 +70,12 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.estimatedRowHeight = 60;
+        if (@available(iOS 11.0, *)) {
+            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        } else {
+            // Fallback on earlier versions
+        }
         _tableView.allowsSelection = NO;
         @weakify(self);
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
