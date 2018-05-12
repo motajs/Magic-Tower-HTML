@@ -39,6 +39,17 @@
 		19082F5A208CDAA3003C9241 /* STStoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 19082F59208CDAA3003C9241 /* STStoreDataController.m */; };
 		19082F5E208CDB2D003C9241 /* ICDeviceIDManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19082F5D208CDB2D003C9241 /* ICDeviceIDManager.m */; };
 		19082F61208CE8B3003C9241 /* IDKeychainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19082F60208CE8B2003C9241 /* IDKeychainManager.m */; };
+		1967E923208EC4780007689E /* STPlayGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1967E922208EC4780007689E /* STPlayGameViewController.m */; };
+		19AC808820A697230008DDE3 /* injection.js in Resources */ = {isa = PBXBuildFile; fileRef = 19AC808720A697230008DDE3 /* injection.js */; };
+		19AC808C20A69DE50008DDE3 /* STJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC808B20A69DE50008DDE3 /* STJSBridge.m */; };
+		19AC818320A6CA280008DDE3 /* UIView+BubbleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817220A6CA270008DDE3 /* UIView+BubbleAnimation.m */; };
+		19AC818420A6CA280008DDE3 /* AWEBubbleAnimationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817320A6CA270008DDE3 /* AWEBubbleAnimationManager.m */; };
+		19AC818520A6CA280008DDE3 /* AWEBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817420A6CA270008DDE3 /* AWEBubble.m */; };
+		19AC818620A6CA280008DDE3 /* AWEBubbleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817520A6CA270008DDE3 /* AWEBubbleAnimation.m */; };
+		19AC818720A6CA280008DDE3 /* AWEBubbleAnimationTimingFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817820A6CA270008DDE3 /* AWEBubbleAnimationTimingFunction.m */; };
+		19AC818820A6CA280008DDE3 /* AWEBubbleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817920A6CA270008DDE3 /* AWEBubbleImageView.m */; };
+		19AC818920A6CA280008DDE3 /* AWEBubbleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817A20A6CA270008DDE3 /* AWEBubbleManager.m */; };
+		19AC818A20A6CA280008DDE3 /* AWEBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC817F20A6CA280008DDE3 /* AWEBubbleView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +119,29 @@
 		19082F5F208CE8B2003C9241 /* IDKeychainManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDKeychainManager.h; sourceTree = "<group>"; };
 		19082F60208CE8B2003C9241 /* IDKeychainManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDKeychainManager.m; sourceTree = "<group>"; };
 		19082F65208D74A3003C9241 /* STGameMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STGameMessage.h; sourceTree = "<group>"; };
+		1967E921208EC4780007689E /* STPlayGameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STPlayGameViewController.h; sourceTree = "<group>"; };
+		1967E922208EC4780007689E /* STPlayGameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STPlayGameViewController.m; sourceTree = "<group>"; };
+		19AC808720A697230008DDE3 /* injection.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = injection.js; sourceTree = "<group>"; };
+		19AC808A20A69DE50008DDE3 /* STJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STJSBridge.h; sourceTree = "<group>"; };
+		19AC808B20A69DE50008DDE3 /* STJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STJSBridge.m; sourceTree = "<group>"; };
+		19AC817120A6CA260008DDE3 /* AWEBubbleAnimationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleAnimationManager.h; sourceTree = "<group>"; };
+		19AC817220A6CA270008DDE3 /* UIView+BubbleAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BubbleAnimation.m"; sourceTree = "<group>"; };
+		19AC817320A6CA270008DDE3 /* AWEBubbleAnimationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleAnimationManager.m; sourceTree = "<group>"; };
+		19AC817420A6CA270008DDE3 /* AWEBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubble.m; sourceTree = "<group>"; };
+		19AC817520A6CA270008DDE3 /* AWEBubbleAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleAnimation.m; sourceTree = "<group>"; };
+		19AC817620A6CA270008DDE3 /* AWEBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleView.h; sourceTree = "<group>"; };
+		19AC817720A6CA270008DDE3 /* AWEBubbleAnchor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleAnchor.h; sourceTree = "<group>"; };
+		19AC817820A6CA270008DDE3 /* AWEBubbleAnimationTimingFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleAnimationTimingFunction.m; sourceTree = "<group>"; };
+		19AC817920A6CA270008DDE3 /* AWEBubbleImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleImageView.m; sourceTree = "<group>"; };
+		19AC817A20A6CA270008DDE3 /* AWEBubbleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleManager.m; sourceTree = "<group>"; };
+		19AC817B20A6CA280008DDE3 /* AWEBubbleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleManager.h; sourceTree = "<group>"; };
+		19AC817C20A6CA280008DDE3 /* UIView+BubbleAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BubbleAnimation.h"; sourceTree = "<group>"; };
+		19AC817D20A6CA280008DDE3 /* AWEBubbleDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleDefinition.h; sourceTree = "<group>"; };
+		19AC817E20A6CA280008DDE3 /* AWEBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubble.h; sourceTree = "<group>"; };
+		19AC817F20A6CA280008DDE3 /* AWEBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWEBubbleView.m; sourceTree = "<group>"; };
+		19AC818020A6CA280008DDE3 /* AWEBubbleAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleAnimation.h; sourceTree = "<group>"; };
+		19AC818120A6CA280008DDE3 /* AWEBubbleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleImageView.h; sourceTree = "<group>"; };
+		19AC818220A6CA280008DDE3 /* AWEBubbleAnimationTimingFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWEBubbleAnimationTimingFunction.h; sourceTree = "<group>"; };
 		38B91FC393E693232CF6F127 /* libPods-Spell Tower.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Spell Tower.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F3DD0F64A37E20D8D454185 /* Pods-Spell Tower.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Spell Tower.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Spell Tower/Pods-Spell Tower.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,6 +183,7 @@
 				19082F38208CD15F003C9241 /* AppFoundation */,
 				19082F18208CD14B003C9241 /* Utils */,
 				19082EF9208CD0AB003C9241 /* Services */,
+				19AC808620A697100008DDE3 /* Resource */,
 				19082EEA208CCEA4003C9241 /* Assets.xcassets */,
 				19082EEC208CCEA4003C9241 /* LaunchScreen.storyboard */,
 				19082EEF208CCEA4003C9241 /* Info.plist */,
@@ -227,6 +262,7 @@
 		19082F18208CD14B003C9241 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				19AC817020A6CA140008DDE3 /* Bubble */,
 				19082F19208CD14B003C9241 /* UIView+Snapshot.m */,
 				19082F1A208CD14B003C9241 /* ICMacros.h */,
 				19082F1B208CD14B003C9241 /* Utils.h */,
@@ -263,6 +299,7 @@
 		19082F39208CD16B003C9241 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				1967E91F208EC4600007689E /* PlayGame */,
 				19082F4E208CD962003C9241 /* Store */,
 				19082F3A208CD212003C9241 /* OfflineGames */,
 			);
@@ -373,6 +410,66 @@
 			path = Message;
 			sourceTree = "<group>";
 		};
+		1967E91F208EC4600007689E /* PlayGame */ = {
+			isa = PBXGroup;
+			children = (
+				19AC808920A69DD90008DDE3 /* Manager */,
+				1967E920208EC4660007689E /* ViewController */,
+			);
+			path = PlayGame;
+			sourceTree = "<group>";
+		};
+		1967E920208EC4660007689E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1967E921208EC4780007689E /* STPlayGameViewController.h */,
+				1967E922208EC4780007689E /* STPlayGameViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		19AC808620A697100008DDE3 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				19AC808720A697230008DDE3 /* injection.js */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		19AC808920A69DD90008DDE3 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				19AC808A20A69DE50008DDE3 /* STJSBridge.h */,
+				19AC808B20A69DE50008DDE3 /* STJSBridge.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		19AC817020A6CA140008DDE3 /* Bubble */ = {
+			isa = PBXGroup;
+			children = (
+				19AC817E20A6CA280008DDE3 /* AWEBubble.h */,
+				19AC817420A6CA270008DDE3 /* AWEBubble.m */,
+				19AC817720A6CA270008DDE3 /* AWEBubbleAnchor.h */,
+				19AC818020A6CA280008DDE3 /* AWEBubbleAnimation.h */,
+				19AC817520A6CA270008DDE3 /* AWEBubbleAnimation.m */,
+				19AC817120A6CA260008DDE3 /* AWEBubbleAnimationManager.h */,
+				19AC817320A6CA270008DDE3 /* AWEBubbleAnimationManager.m */,
+				19AC818220A6CA280008DDE3 /* AWEBubbleAnimationTimingFunction.h */,
+				19AC817820A6CA270008DDE3 /* AWEBubbleAnimationTimingFunction.m */,
+				19AC817D20A6CA280008DDE3 /* AWEBubbleDefinition.h */,
+				19AC818120A6CA280008DDE3 /* AWEBubbleImageView.h */,
+				19AC817920A6CA270008DDE3 /* AWEBubbleImageView.m */,
+				19AC817B20A6CA280008DDE3 /* AWEBubbleManager.h */,
+				19AC817A20A6CA270008DDE3 /* AWEBubbleManager.m */,
+				19AC817620A6CA270008DDE3 /* AWEBubbleView.h */,
+				19AC817F20A6CA280008DDE3 /* AWEBubbleView.m */,
+				19AC817C20A6CA280008DDE3 /* UIView+BubbleAnimation.h */,
+				19AC817220A6CA270008DDE3 /* UIView+BubbleAnimation.m */,
+			);
+			path = Bubble;
+			sourceTree = "<group>";
+		};
 		33317CE8623406D987B88E95 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				19082EEE208CCEA4003C9241 /* LaunchScreen.storyboard in Resources */,
+				19AC808820A697230008DDE3 /* injection.js in Resources */,
 				19082EEB208CCEA4003C9241 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -480,6 +578,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Spell Tower/Pods-Spell Tower-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -516,14 +615,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19AC818820A6CA280008DDE3 /* AWEBubbleImageView.m in Sources */,
+				19AC818920A6CA280008DDE3 /* AWEBubbleManager.m in Sources */,
+				19AC818A20A6CA280008DDE3 /* AWEBubbleView.m in Sources */,
 				19082F2E208CD14B003C9241 /* UIView+Snapshot.m in Sources */,
 				19082F0C208CD127003C9241 /* ICAppearenceManager.m in Sources */,
 				19082F30208CD14B003C9241 /* ICWebViewManager.m in Sources */,
+				19AC818320A6CA280008DDE3 /* UIView+BubbleAnimation.m in Sources */,
 				19082F36208CD14B003C9241 /* NSArray+NoRepeatedItems.m in Sources */,
 				19082F5A208CDAA3003C9241 /* STStoreDataController.m in Sources */,
+				1967E923208EC4780007689E /* STPlayGameViewController.m in Sources */,
 				19082F37208CD14B003C9241 /* ICUIUtils.m in Sources */,
 				19082F0D208CD127003C9241 /* UIColor+HexString.m in Sources */,
+				19AC818520A6CA280008DDE3 /* AWEBubble.m in Sources */,
 				19082F56208CDA23003C9241 /* STStoreTableViewCell.m in Sources */,
+				19AC818620A6CA280008DDE3 /* AWEBubbleAnimation.m in Sources */,
 				19082F2F208CD14B003C9241 /* NSString+RelativePath.m in Sources */,
 				19082F17208CD12C003C9241 /* UIViewController+IDDismiss.m in Sources */,
 				19082F3D208CD228003C9241 /* STOfflineGamesViewController.m in Sources */,
@@ -537,11 +643,14 @@
 				19082F32208CD14B003C9241 /* UIButton+FixedSizeToFit.m in Sources */,
 				19082F35208CD14B003C9241 /* Utils.m in Sources */,
 				19082F16208CD12C003C9241 /* IDResponder.m in Sources */,
+				19AC808C20A69DE50008DDE3 /* STJSBridge.m in Sources */,
+				19AC818420A6CA280008DDE3 /* AWEBubbleAnimationManager.m in Sources */,
 				19082EFD208CD0BD003C9241 /* ICNetworkManager.m in Sources */,
 				19082F33208CD14B003C9241 /* NSArray+Map.m in Sources */,
 				19082F01208CD112003C9241 /* ICMessageCenter.m in Sources */,
 				19082EE3208CCEA2003C9241 /* AppDelegate.m in Sources */,
 				19082F52208CD973003C9241 /* STStoreViewController.m in Sources */,
+				19AC818720A6CA280008DDE3 /* AWEBubbleAnimationTimingFunction.m in Sources */,
 				19082F34208CD14B003C9241 /* ICSwizzle.m in Sources */,
 				19082F5E208CDB2D003C9241 /* ICDeviceIDManager.m in Sources */,
 				19082F15208CD12C003C9241 /* IDRouter.m in Sources */,

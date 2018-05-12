@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface STGameModel : NSObject
+@interface STGameModel : NSObject<NSCoding>
 
 @property (nonatomic, strong) NSString *gameID;
 @property (nonatomic, strong) NSString *titleName;

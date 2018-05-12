@@ -12,19 +12,27 @@
 #import <objc/runtime.h>
 
 #define ICEncode(aCoder, selectorName) {\
-    [aCoder encodeObject:_##selectorName forKey:NSStringFromSelector(@selector(selectorName))];\
+    if ([self respondsToSelector:@selector(selectorName)]) [aCoder encodeObject:_##selectorName forKey:NSStringFromSelector(@selector(selectorName))];\
 }
 
 #define ICEncodeInteger(aCoder, selectorName) {\
-    [aCoder encodeInteger:_##selectorName forKey:NSStringFromSelector(@selector(selectorName))];\
+    if ([self respondsToSelector:@selector(selectorName)]) [aCoder encodeInteger:_##selectorName forKey:NSStringFromSelector(@selector(selectorName))];\
+}
+
+#define ICEncodeFloat(aCoder, selectorName) {\
+    if ([self respondsToSelector:@selector(selectorName)]) [aCoder encodeFloat:_##selectorName forKey:NSStringFromSelector(@selector(selectorName))];\
 }
 
 #define ICDecode(aCoder, selectorName) {\
-    _##selectorName = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(selectorName))];\
+    if ([self respondsToSelector:@selector(selectorName)]) _##selectorName = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(selectorName))];\
 }
 
 #define ICDecodeInteger(aCoder, selectorName) {\
-    _##selectorName = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(selectorName))];\
+    if ([self respondsToSelector:@selector(selectorName)]) _##selectorName = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(selectorName))];\
+}
+
+#define ICDecodeFloat(aCoder, selectorName) {\
+if ([self respondsToSelector:@selector(selectorName)]) _##selectorName = [aDecoder decodeFloatForKey:NSStringFromSelector(@selector(selectorName))];\
 }
 
 #define STATUS_BAR_HEIGHT [[UIApplication sharedApplication] statusBarFrame].size.height

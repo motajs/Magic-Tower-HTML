@@ -8,6 +8,8 @@ target 'Spell Tower' do
   pod 'SVProgressHUD'
   pod 'SSZipArchive'
   pod 'YYWebImage'
+  pod 'pop' 
+  pod 'MJRefresh'
   #pod 'UITextView+Placeholder', '~> 1.2'
   #pod 'Fabric'
   #pod 'Crashlytics'

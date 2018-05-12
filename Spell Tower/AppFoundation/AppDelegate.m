@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "IDRouter.h"
+#import "STLocalGameManager.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +23,13 @@
     self.window.rootViewController = navi;
     [self.window makeKeyAndVisible];
     
+    [[STLocalGameManager sharedInstance] installOfflinePackagesIfNeeded];
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
     return YES;
 }
 

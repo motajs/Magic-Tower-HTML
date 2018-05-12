@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ICMessageCenter.h"
 
 @protocol STGameMessage <NSObject>
 

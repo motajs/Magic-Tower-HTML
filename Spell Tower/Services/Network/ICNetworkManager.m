@@ -11,7 +11,20 @@
 
 @implementation ICNetworkManager
 
-+ (void)requestApiPath:(NSString *)api method:(NSString *)method params:(NSDictionary *)params withCompletionBlock:(void (^)(BOOL, NSDictionary *, NSError *))completionBlock
++ (void)requestApiPath:(NSString *)api method:(NSString *)method params:(NSDictionary *)params requestType:(ICNetworkRequestType)type withCompletionBlock:(void (^)(BOOL, NSDictionary *, NSError *))completionBlock
+{
+    [self requestRawApiPath:api method:method params:params requestType:type withCompletionBlock:^(BOOL success, NSData *data, NSError *error) {
+        NSError *jsonError;
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+        if (result && [result isKindOfClass:[NSDictionary class]] && !jsonError) {
+            completionBlock(YES, result, nil);
+        } else {
+            completionBlock(NO, nil, jsonError);
+        }
+    }];
+}
+
++ (void)requestRawApiPath:(NSString *)api method:(NSString *)method params:(NSDictionary *)params requestType:(ICNetworkRequestType)type withCompletionBlock:(void (^)(BOOL, NSData *, NSError *))completionBlock
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:api] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
     [request setValue:[ICDeviceIDManager deviceID] ?: @"" forHTTPHeaderField:@"IC-Device-ID"];
@@ -29,7 +42,15 @@
     } else {
         if (params && [params isKindOfClass:[NSDictionary class]]) {
             NSError *error;
-            [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:params options:0 error:&error]];
+            if (type == ICNetworkRequestTypeJSON) {
+                [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:params options:0 error:&error]];
+            } else {
+                NSMutableArray *bodyContent = [NSMutableArray array];
+                [params enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                    [bodyContent addObject:[NSString stringWithFormat:@"%@=%@", [key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]], [obj stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]];
+                }];
+                [request setHTTPBody:[[bodyContent componentsJoinedByString:@"&"] dataUsingEncoding:NSUTF8StringEncoding]];
+            }
         }
     }
     [request setHTTPMethod:method];
@@ -38,13 +59,7 @@
             return;
         }
         if (data && !error) {
-            NSError *jsonError;
-            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-            if (result && [result isKindOfClass:[NSDictionary class]] && !jsonError) {
-                completionBlock(YES, result, nil);
-            } else {
-                completionBlock(NO, nil, jsonError);
-            }
+            completionBlock(YES, data, nil);
         } else {
             completionBlock(NO, nil, error);
         }

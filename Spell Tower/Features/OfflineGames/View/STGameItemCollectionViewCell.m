@@ -36,16 +36,16 @@
     
     [self.thumbImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView).offset(10);
-        make.leading.equalTo(self.contentView).offset(10);
-        make.trailing.equalTo(self.contentView).offset(-10);
+        make.leading.equalTo(self.contentView);
+        make.trailing.equalTo(self.contentView);
         
-        make.width.height.equalTo(@(128));
+        make.height.equalTo(@(128));
     }];
     
     [self.gameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.thumbImageView.mas_bottom).offset(10);
         make.centerX.equalTo(self.thumbImageView);
-        make.bottom.equalTo(self.thumbImageView).offset(-10);
+        make.bottom.equalTo(self.contentView).offset(-10);
     }];
 }
 
@@ -53,6 +53,8 @@
 {
     if (!_thumbImageView) {
         _thumbImageView = [[UIImageView alloc] init];
+        _thumbImageView.clipsToBounds = YES;
+        _thumbImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _thumbImageView;
 }

@@ -8,11 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSUInteger {
+    ICNetworkRequestTypeJSON,
+    ICNetworkRequestTypeFormData,
+} ICNetworkRequestType;
+
 @interface ICNetworkManager : NSObject
 
 + (void)requestApiPath:(NSString *)api
                 method:(NSString *)method
                 params:(NSDictionary *)params
+           requestType:(ICNetworkRequestType)type
    withCompletionBlock:(void (^)(BOOL success, NSDictionary *data, NSError *error))completionBlock;
+
++ (void)requestRawApiPath:(NSString *)api
+                   method:(NSString *)method
+                   params:(NSDictionary *)params
+              requestType:(ICNetworkRequestType)type
+      withCompletionBlock:(void (^)(BOOL, NSData *, NSError *))completionBlock;
 
 @end

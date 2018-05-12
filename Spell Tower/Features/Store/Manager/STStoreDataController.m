@@ -35,7 +35,7 @@
     self.currentPage = 1;
     self.hasMore = YES;
     self.isRequestOnAir = YES;
-    [ICNetworkManager requestApiPath:@"https://ckcz123.com/games/upload.php" method:@"GET" params:@{@"type": @"all", @"page": @(self.currentPage)} withCompletionBlock:^(BOOL success, NSDictionary *data, NSError *error) {
+    [ICNetworkManager requestApiPath:@"https://ckcz123.com/games/upload.php" method:@"GET" params:@{@"type": @"all", @"page": @(self.currentPage)} requestType:ICNetworkRequestTypeJSON withCompletionBlock:^(BOOL success, NSDictionary *data, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isRequestOnAir = NO;
             if (success) {
@@ -63,7 +63,7 @@
     }
     self.currentPage++;
     self.isRequestOnAir = YES;
-    [ICNetworkManager requestApiPath:@"https://ckcz123.com/games/upload.php" method:@"GET" params:@{@"type": @"all", @"page": @(self.currentPage)} withCompletionBlock:^(BOOL success, NSDictionary *data, NSError *error) {
+    [ICNetworkManager requestApiPath:@"https://ckcz123.com/games/upload.php" method:@"GET" params:@{@"type": @"all", @"page": @(self.currentPage)} requestType:ICNetworkRequestTypeJSON withCompletionBlock:^(BOOL success, NSDictionary *data, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.isRequestOnAir = NO;
             if (success) {

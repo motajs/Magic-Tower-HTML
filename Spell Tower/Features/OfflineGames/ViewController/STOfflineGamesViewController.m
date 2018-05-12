@@ -16,6 +16,7 @@
 #import "STLocalGameManager.h"
 #import "ICMessageCenter.h"
 #import "STGameMessage.h"
+#import "AWEBubbleManager.h"
 
 #define DROP_BAR_HEIGHT (60 + BOTTOM_OFFSET)
 
@@ -32,9 +33,9 @@ NSString * const deleteActiveColor = @"a91212";
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *localGames;
 @property (nonatomic, strong) UIView *dropTargetView;
-@property (nonatomic, strong) UIView *editDropView;
 @property (nonatomic, strong) UIView *deleteDropView;
 @property (nonatomic, assign) BOOL isMovingItem;
+@property (nonatomic, strong) UILabel *emptyLabel;
 
 @end
 
@@ -47,6 +48,7 @@ NSString * const deleteActiveColor = @"a91212";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.localGames = [STLocalGameManager sharedInstance].localGames;
     IC_REGISTER_MESSAGE(self, STGameMessage);
     [self setupUI];
 }
@@ -64,6 +66,14 @@ NSString * const deleteActiveColor = @"a91212";
     self.navigationItem.leftBarButtonItem = settingsButton;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTapped:)];
+    
+    [self.view addSubview:self.emptyLabel];
+    
+    [self.emptyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.view);
+        make.leading.greaterThanOrEqualTo(self.view).offset(10);
+        make.trailing.lessThanOrEqualTo(self.view).offset(-10);
+    }];
 }
 
 - (void)addButtonTapped:(UIBarButtonItem *)button
@@ -80,9 +90,9 @@ NSString * const deleteActiveColor = @"a91212";
 {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.itemSize = CGSizeMake(130, 170);
-        layout.minimumInteritemSpacing=30;
-        layout.minimumLineSpacing=50;
+        layout.itemSize = CGSizeMake(150, 170);
+        layout.minimumInteritemSpacing=10;
+        layout.minimumLineSpacing=20;
         layout.sectionInset=UIEdgeInsetsMake(20, 30, 20, 30);
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -99,6 +109,18 @@ NSString * const deleteActiveColor = @"a91212";
         _collectionView.dropDelegate = self;
     }
     return _collectionView;
+}
+
+- (UILabel *)emptyLabel
+{
+    if (!_emptyLabel) {
+        _emptyLabel = [[UILabel alloc] init];
+        _emptyLabel.hidden = self.localGames.count > 0;
+        _emptyLabel.font = [UIFont systemFontOfSize:14];
+        _emptyLabel.text = @"没有离线的游戏，快点击添加一个吧~";
+        _emptyLabel.textColor = IDColorS22;
+    }
+    return _emptyLabel;
 }
 
 - (NSArray<UIDragItem *> *)collectionView:(UICollectionView *)collectionView itemsForBeginningDragSession:(id<UIDragSession>)session atIndexPath:(NSIndexPath *)indexPath
@@ -149,6 +171,11 @@ NSString * const deleteActiveColor = @"a91212";
     return indexPath.item < self.localGames.count;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [IDRouter transferToURL:@"tower://game" withParams:@{@"model": self.localGames[indexPath.item]}];
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -178,40 +205,16 @@ NSString * const deleteActiveColor = @"a91212";
 {
     if (!_dropTargetView) {
         _dropTargetView = [[UIView alloc] init];
-        [_dropTargetView addSubview:self.editDropView];
         [_dropTargetView addSubview:self.deleteDropView];
         
         UIDropInteraction *dropInteraction = [[UIDropInteraction alloc] initWithDelegate:self];
         [_dropTargetView addInteraction:dropInteraction];
         
-        [self.editDropView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.top.bottom.equalTo(self->_dropTargetView);
-        }];
         [self.deleteDropView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(self.editDropView.mas_trailing);
-            make.top.bottom.trailing.equalTo(self->_dropTargetView);
-            make.width.equalTo(self.editDropView);
+            make.edges.equalTo(self->_dropTargetView);
         }];
     }
     return _dropTargetView;
-}
-
-- (UIView *)editDropView
-{
-    if (!_editDropView) {
-        _editDropView = [[UIView alloc] init];
-        _editDropView.backgroundColor = [UIColor colorWithHexString:editColor];
-        
-        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"drop_edit_icon"]];
-        iconView.tintColor = IDColorS20;
-        
-        [_editDropView addSubview:iconView];
-        [iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self->_editDropView);
-            make.centerY.equalTo(self->_editDropView).offset(-BOTTOM_OFFSET / 2);
-        }];
-    }
-    return _editDropView;
 }
 
 - (UIView *)deleteDropView
@@ -248,7 +251,6 @@ NSString * const deleteActiveColor = @"a91212";
         make.height.equalTo(@(DROP_BAR_HEIGHT));
     }];
     
-    self.editDropView.backgroundColor = [UIColor colorWithHexString:editColor];
     self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteColor];
     
     [UIView animateWithDuration:0.4 animations:^{
@@ -277,14 +279,10 @@ NSString * const deleteActiveColor = @"a91212";
 
 - (UIDropProposal *)dropInteraction:(UIDropInteraction *)interaction sessionDidUpdate:(id<UIDropSession>)session
 {
-    self.editDropView.backgroundColor = [UIColor colorWithHexString:editColor];
     self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteColor];
     CGPoint location = [session locationInView:self.dropTargetView];
     UIView *target = [self.dropTargetView hitTest:location withEvent:nil];
-    if (target == self.editDropView) {
-        self.editDropView.backgroundColor = [UIColor colorWithHexString:editActiveColor];
-        return [[UIDropProposal alloc] initWithDropOperation:UIDropOperationCopy];
-    } else if (target == self.deleteDropView) {
+    if (target == self.deleteDropView) {
         self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteActiveColor];
         return [[UIDropProposal alloc] initWithDropOperation:UIDropOperationCopy];
     }
@@ -293,7 +291,6 @@ NSString * const deleteActiveColor = @"a91212";
 
 - (void)dropInteraction:(UIDropInteraction *)interaction sessionDidExit:(id<UIDropSession>)session
 {
-    self.editDropView.backgroundColor = [UIColor colorWithHexString:editColor];
     self.deleteDropView.backgroundColor = [UIColor colorWithHexString:deleteColor];
 }
 
@@ -314,6 +311,7 @@ NSString * const deleteActiveColor = @"a91212";
         self.isMovingItem = NO;
         self.localGames = [STLocalGameManager sharedInstance].localGames;
         [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+        self.emptyLabel.hidden = self.localGames.count > 0;
     }
 }
 
@@ -322,6 +320,7 @@ NSString * const deleteActiveColor = @"a91212";
 {
     self.localGames = [STLocalGameManager sharedInstance].localGames;
     [self.collectionView reloadData];
+    self.emptyLabel.hidden = self.localGames.count > 0;
 }
 
 @end

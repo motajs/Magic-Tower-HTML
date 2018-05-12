@@ -15,6 +15,7 @@
 #import "STLocalGameManager.h"
 #import "ICMacros.h"
 #import "ICUIUtils.h"
+#import <MJRefresh.h>
 
 @interface STStoreViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -49,8 +50,16 @@
 
 - (void)initialFetch
 {
+    [ICUIUtils loading];
     [self.dataController initFetchWithCompletion:^(NSArray<STGameModel *> *result, NSError *error) {
-        [self.tableView reloadData];
+        [ICUIUtils endLoading];
+        [self.tableView.mj_header endRefreshing];
+        if (error) {
+            [ICUIUtils toast:@"加载失败，请稍后重试"];
+        } else {
+            [self.tableView reloadData];
+            [self.tableView.mj_footer resetNoMoreData];
+        }
     }];
 }
 
@@ -61,6 +70,23 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.allowsSelection = NO;
+        @weakify(self);
+        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            @strongify(self);
+            [self initialFetch];
+        }];
+        _tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            @strongify(self);
+            [self.dataController loadMoreWithCompletion:^(NSArray<STGameModel *> *result, NSError *error) {
+                if (!self.dataController.hasMore) {
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [self.tableView.mj_footer endRefreshing];
+                }
+                [self.tableView reloadData];
+            }];
+        }];
         
         [_tableView registerClass:STStoreTableViewCell.class forCellReuseIdentifier:NSStringFromClass(STStoreTableViewCell.class)];
     }
@@ -84,22 +110,21 @@
     @weakify(self);
     cell.downloadButtonTapBlock = ^{
         @strongify(self);
-        [ICUIUtils loadingWithStatus:@"正在下载"];
-        [[STLocalGameManager sharedInstance] downloadGame:self.dataController.games[indexPath.row] withCompletionBlock:^{
-            [ICUIUtils endLoading];
-            [ICUIUtils toast:@"下载成功"];
-        }];
+        STGameModel *game = self.dataController.games[indexPath.row];
+        if ([[STLocalGameManager sharedInstance].localGames containsObject:game]) {
+            [IDRouter transferToURL:@"tower://game" withParams:@{@"model": game}];
+        } else {
+            [ICUIUtils loadingWithStatus:@"正在下载"];
+            [[STLocalGameManager sharedInstance] downloadGame:self.dataController.games[indexPath.row] progress:^(float progress) {
+                [ICUIUtils loadingWithProgress:progress status:@"正在下载"];
+            } withCompletionBlock:^{
+                [ICUIUtils endLoading];
+                [ICUIUtils toast:@"下载成功"];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }];
+        }
     };
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row > self.dataController.games.count - 3 && self.dataController.hasMore) {
-        [self.dataController loadMoreWithCompletion:^(NSArray<STGameModel *> *result, NSError *error) {
-            [self.tableView reloadData];
-        }];
-    }
 }
 
 @end

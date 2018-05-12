@@ -11,6 +11,7 @@
 #import <Masonry.h>
 #import "IDColorService.h"
 #import <UIImageView+YYWebImage.h>
+#import "STLocalGameManager.h"
 
 @interface STStoreTableViewCell()
 
@@ -115,7 +116,6 @@
 {
     if (!_downloadButton) {
         _downloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_downloadButton setTitle:@"获取" forState:UIControlStateNormal];
         _downloadButton.layer.borderWidth = 1;
         _downloadButton.layer.borderColor = _downloadButton.tintColor.CGColor;
         _downloadButton.layer.cornerRadius = 5;
@@ -133,6 +133,12 @@
     self.authorLabel.text = [NSString stringWithFormat:@"%@/%@", game.originAuthor, game.copiedAuthor];
     self.descLabel.text = game.descriptionString;
     [self.thumbnailImageView yy_setImageWithURL:game.thumbURL placeholder:[UIImage imageNamed:@"placeholder"] options:YYWebImageOptionSetImageWithFadeAnimation completion:nil];
+    
+    if ([[STLocalGameManager sharedInstance].localGames containsObject:game]) {
+        [self.downloadButton setTitle:@"打开" forState:UIControlStateNormal];
+    } else {
+        [self.downloadButton setTitle:@"获取" forState:UIControlStateNormal];
+    }
 }
 
 - (void)downloadButtonTapped

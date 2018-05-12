@@ -16,6 +16,10 @@
 - (NSArray<STGameModel *> *)localGames;
 - (void)deleteGame:(STGameModel *)game;
 - (void)moveGameAtIndex:(NSInteger)index toIndex:(NSInteger)newIndex;
-- (void)downloadGame:(STGameModel *)game withCompletionBlock:(void(^)(void))completionBlock;
+- (void)downloadGame:(STGameModel *)game
+            progress:(void(^)(float progress))progressUpdateBlock
+ withCompletionBlock:(void(^)(void))completionBlock;
+
+- (void)installOfflinePackagesIfNeeded;
 
 @end

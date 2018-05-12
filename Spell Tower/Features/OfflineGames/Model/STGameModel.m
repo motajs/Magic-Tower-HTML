@@ -8,6 +8,7 @@
 
 #import "STGameModel.h"
 #import "NSArray+Map.h"
+#import "ICMacros.h"
 
 @implementation STGameModel
 
@@ -15,7 +16,7 @@
 {
     STGameModel *model = [[STGameModel alloc] init];
     model.gameID = json[@"id"];
-    model.titleName = json[@"title"];
+    model.titleName = [[NSRegularExpression regularExpressionWithPattern:@"<[^>]*>" options:0 error:nil] stringByReplacingMatchesInString:json[@"title"] options:0 range:NSMakeRange(0, [json[@"title"] length]) withTemplate:@""];
     model.identifierName = json[@"name"];
     model.version = json[@"version"];
     model.originAuthor = json[@"author"];
@@ -33,6 +34,52 @@
     model.tags = [json[@"tag"] componentsSeparatedByString:@"|"];
     
     return model;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    ICEncode(aCoder, gameID);
+    ICEncode(aCoder, titleName);
+    ICEncode(aCoder, identifierName);
+    ICEncode(aCoder, version);
+    ICEncode(aCoder, originAuthor);
+    ICEncode(aCoder, copiedAuthor);
+    ICEncode(aCoder, webURLString);
+    ICEncode(aCoder, imageURL);
+    ICEncode(aCoder, descriptionString);
+    ICEncode(aCoder, extraInfo);
+    ICEncodeFloat(aCoder, score);
+    ICEncodeInteger(aCoder, playerCount);
+    ICEncodeInteger(aCoder, winnerCount);
+    ICEncode(aCoder, lastWinnerDate);
+    ICEncode(aCoder, createDate);
+    ICEncode(aCoder, updateDate);
+    ICEncode(aCoder, tags);
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        ICDecode(aCoder, gameID);
+        ICDecode(aCoder, titleName);
+        ICDecode(aCoder, identifierName);
+        ICDecode(aCoder, version);
+        ICDecode(aCoder, originAuthor);
+        ICDecode(aCoder, copiedAuthor);
+        ICDecode(aCoder, webURLString);
+        ICDecode(aCoder, imageURL);
+        ICDecode(aCoder, descriptionString);
+        ICDecode(aCoder, extraInfo);
+        ICDecodeFloat(aCoder, score);
+        ICDecodeInteger(aCoder, playerCount);
+        ICDecodeInteger(aCoder, winnerCount);
+        ICDecode(aCoder, lastWinnerDate);
+        ICDecode(aCoder, createDate);
+        ICDecode(aCoder, updateDate);
+        ICDecode(aCoder, tags);
+    }
+    return self;
 }
 
 + (NSArray<STGameModel *> *)modelsFromJSONArray:(NSArray *)jsonArray
@@ -61,9 +108,9 @@
 
 + (NSString *)allGamesRootPath
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentPath = paths.firstObject;
-    return documentPath;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryPath = paths.firstObject;
+    return libraryPath;
 }
 
 - (BOOL)isEqual:(id)object
